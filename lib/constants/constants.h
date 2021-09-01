@@ -1,0 +1,51 @@
+#ifndef __CONSTANTS_H__
+#define __CONSTANTS_H__
+
+#include <Arduboy2.h>
+
+#define WARRIOR 0
+#define CLERIC 1
+#define ROGUE 2
+#define WIZARD 3
+#define BARBARIAN 4
+#define ELF 5
+#define DWARF 6
+
+#define TEAM_SIZE 4
+#define MAX_DUNGEON_SIZE 256
+
+#define ARMOR_LIGHT 0b0000000000000001
+#define ARMOR_HEAVY 0b0000000000000010
+#define ARMOR_SHIELD 0b0000000000000100
+
+#define WEAPON_ONE_HANDED 0b0000000100000000
+#define WEAPON_TWO_HANDED 0b0000001000000000
+#define WEAPON_ONE_HANDED_LIGHT 0b0000010000000000
+#define WEAPON_CRUSHING 0b0000100000000000
+#define WEAPON_SLASHING 0b0001000000000000
+#define WEAPON_BOW 0b0010000000000000
+#define WEAPON_SLING 0b0100000000000000
+
+#define BAG_BANDAGE 0b00000001
+#define BAG_HOLY_WATER_VIAL 0b00000010
+#define BAG_POTION_OF_HEALING 0b00000100
+#define BAG_LANTERN 0b00001000
+#define BAG_ROPE 0b00010000
+#define BAG_LOCK_PICKS 0b00100000
+#define BAG_SPELL_BOOK 0b01000000
+
+#define SPELL_BLESSING 0b00000001
+
+typedef struct
+{
+  uint8_t clazz;
+  uint8_t lvl;
+  uint8_t gold;
+  uint8_t pv;
+  uint16_t equip;
+  uint8_t bag;
+  uint8_t spellbook;
+  uint8_t spellcount;
+} Player;
+
+#endif
