@@ -3,7 +3,7 @@
 Room::Room(Arduboy2 *ab, uint8_t pattern)
 {
     this->pattern = pattern;
-    if (pattern == 3 || pattern == 4 || pattern == 5 || pattern == 11 || pattern == 12 || pattern == 13 || pattern == 14 || pattern == 32 || pattern == 33 || pattern == 42 || pattern == 45 || pattern == 51 || pattern == 53 || pattern == 55 || pattern == 62 || pattern == 63 || pattern == 65)
+    if (pattern == 3 || pattern == 4 || pattern == 5 || pattern >= 11 && pattern <= 14 || pattern == 26 || pattern == 32 || pattern == 33 || pattern == 42 || pattern == 45 || pattern == 51 || pattern == 53 || pattern == 55 || pattern == 62 || pattern == 63 || pattern == 65)
     {
         this->flags |= ROOM_CORRIDOR_FLAG;
     }
