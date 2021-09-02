@@ -2,8 +2,10 @@
 #define __SETUP_H__
 
 #include <Arduboy2.h>
+
 #include <constants.h>
 #include <dices.h>
+#include <player.h>
 
 class Setup
 {

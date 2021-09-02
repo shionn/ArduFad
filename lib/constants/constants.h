@@ -5,14 +5,6 @@
 
 // #define DEBUG
 
-#define WARRIOR 0
-#define CLERIC 1
-#define ROGUE 2
-#define WIZARD 3
-#define BARBARIAN 4
-#define ELF 5
-#define DWARF 6
-
 #define TEAM_SIZE 4
 #define MAX_DUNGEON_SIZE 256
 
@@ -37,17 +29,5 @@
 #define BAG_SPELL_BOOK 0b01000000
 
 #define SPELL_BLESSING 0b00000001
-
-typedef struct
-{
-  uint8_t clazz;
-  uint8_t lvl;
-  uint8_t gold;
-  uint8_t pv;
-  uint16_t equip;
-  uint8_t bag;
-  uint8_t spellbook;
-  uint8_t spellcount;
-} Player;
 
 #endif

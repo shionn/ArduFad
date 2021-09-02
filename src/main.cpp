@@ -1,16 +1,18 @@
 #include <Arduboy2.h>
-#include <Tinyfont.h>
+// #include <Tinyfont.h>
+#include <Font3x5.h>
 
 #include <constants.h>
 #include <setup.h>
 
-#include <dungeon.h>
+#include <room.h>
 
 Arduboy2 ab;
-Tinyfont tinyfont = Tinyfont(ab.sBuffer, Arduboy2::width(), Arduboy2::height());
+// Tinyfont tinyfont = Tinyfont(ab.sBuffer, Arduboy2::width(), Arduboy2::height());
+Font3x5 font = Font3x5();
 
 Player team[TEAM_SIZE];
-Dungeon dungeon(&ab);
+Room *room;
 
 void setup()
 {
@@ -27,41 +29,39 @@ void setup()
   setup->selectTeams();
   //setup->buyequip
   free(setup);
-  dungeon.initialize();
+  room = new Room(&ab, D6());
 }
 
 void loop()
 {
-
-  // pause render until it's time for the next frame
   if (!(ab.nextFrame()))
     return;
 
   ab.clear();
-  dungeon.draw();
-  ab.drawFastHLine(0, 53, 127);
-  tinyfont.setCursor(0, 55);
-  tinyfont.print("Attaque");
-  tinyfont.setTextColor(1);
-  tinyfont.setCursor(63, 55);
-  tinyfont.print("Fuir");
-  tinyfont.setCursor(0, 60);
-  tinyfont.print("Explorer");
-  tinyfont.setCursor(63, 60);
-  tinyfont.print("W 21/34");
+  room->draw();
+  ab.drawFastHLine(0, 50, 127);
+  ab.drawFastVLine(96, 0, 50);
 
-  ab.drawFastVLine(96, 0, 53);
-  tinyfont.setCursor(98, 0);
-  tinyfont.print("W");
-  tinyfont.setCursor(98+6, 0);
-  tinyfont.print("21/34");
-  tinyfont.setCursor(98, 5);
-  tinyfont.print("W21/34");
-  tinyfont.setCursor(98, 10);
-  tinyfont.print("W21/34");
-  tinyfont.setCursor(98, 15);
-  tinyfont.print("W21/34");
+  // affichage de l'equipe
+  for (uint8_t i = 0; i < TEAM_SIZE; i++)
+  {
+    font.setCursor(98, i * 6);
+    font.print(team[i].shortClassName());
+    font.setCursor(104, i * 6);
+    font.print(team[i].getHp());
+    font.print("/");
+    font.print(team[i].getMaxHp());
+  }
 
+  font.setCursor(0, 52);
+  font.print("Attaque");
+  font.setTextColor(1);
+  font.setCursor(63, 52);
+  font.print("Fuir");
+  font.setCursor(0, 58);
+  font.print("Explorer");
+  font.setCursor(63, 58);
+  font.print("Sortir");
 
   ab.display();
 }

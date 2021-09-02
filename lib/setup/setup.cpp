@@ -1,11 +1,13 @@
 #include <setup.h>
 
-Setup::Setup(Arduboy2* ab, Player* team) {
-    this->ab = ab;
-    this->team = team;
+Setup::Setup(Arduboy2 *ab, Player *team)
+{
+  this->ab = ab;
+  this->team = team;
 }
 
-void Setup::selectTeams() {
+void Setup::selectTeams()
+{
   boolean selected = false;
   uint8_t cursor = 0;
   uint8_t count = 0;
@@ -34,69 +36,48 @@ void Setup::selectTeams() {
     }
     if (ab->justPressed(B_BUTTON) && count < 4)
     {
-      team[count].clazz = cursor;
-      team[count].lvl = 1;
+      team[count].initialize(cursor);
       switch (cursor)
       {
       case WARRIOR:
-        team[count].gold = XD6(2);
-        team[count].pv = 7;
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].equip = selectEquip(4, choicess);
+        team[count].addEquip(selectEquip(4, choicess));
         break;
       case CLERIC:
-        team[count].gold = D6();
-        team[count].pv = 5;
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].equip = selectEquip(4, choicess);
-        team[count].spellbook = SPELL_BLESSING;
-        team[count].spellcount = 3;
+        team[count].addEquip(selectEquip(4, choicess));
         break;
       case ROGUE:
-        team[count].gold = XD6(3);
-        team[count].pv = 4;
-        team[count].equip = ARMOR_LIGHT | WEAPON_ONE_HANDED_LIGHT | WEAPON_SLASHING;
-        team[count].bag = BAG_ROPE | BAG_LOCK_PICKS;
+        team[count].addEquip(ARMOR_LIGHT | WEAPON_ONE_HANDED_LIGHT | WEAPON_SLASHING);
         break;
       case WIZARD:
-        team[count].gold = XD6(4);
-        team[count].pv = 3;
-        team[count].equip = WEAPON_ONE_HANDED_LIGHT | WEAPON_CRUSHING;
-        team[count].bag = BAG_SPELL_BOOK;
-        team[count].spellcount = 3;
+        team[count].addEquip(WEAPON_ONE_HANDED_LIGHT | WEAPON_CRUSHING);
         //TODO team[count].spellbook =
         break;
       case BARBARIAN:
-        team[count].gold = D6();
-        team[count].pv = 8;
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].equip = selectEquip(4, choicess);
+        team[count].addEquip(selectEquip(4, choicess));
         break;
       case ELF:
-        team[count].gold = XD6(2);
-        team[count].pv = 5;
-        team[count].equip = ARMOR_LIGHT;
         choicess[0] = ARMOR_LIGHT | WEAPON_BOW | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | WEAPON_BOW | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
-        team[count].equip = selectEquip(2, choicess);
+        team[count].addEquip(selectEquip(2, choicess));
         break;
       case DWARF:
-        team[count].gold = XD6(3);
-        team[count].pv = 6;
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_HEAVY | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_HEAVY | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].equip = selectEquip(4, choicess);
+        team[count].addEquip(selectEquip(4, choicess));
         break;
       }
       count++;
@@ -118,15 +99,14 @@ void Setup::selectTeams() {
     for (uint8_t i = 0; i < count; i++)
     {
       ab->setCursor(64, i * 8);
-      ab->print(className(team[i].clazz));
+      ab->print(team[i].fullClassName());
     }
 
     ab->display();
   }
 };
 
-
-uint16_t Setup::selectEquip(uint8_t count, uint16_t* choices)
+uint16_t Setup::selectEquip(uint8_t count, uint16_t *choices)
 {
   boolean selected = false;
   uint8_t cursor = 0;
@@ -193,4 +173,3 @@ uint16_t Setup::selectEquip(uint8_t count, uint16_t* choices)
   }
   return choices[cursor];
 }
-
