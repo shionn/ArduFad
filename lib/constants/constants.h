@@ -3,6 +3,8 @@
 
 #include <Arduboy2.h>
 
+// #define DEBUG
+
 #define WARRIOR 0
 #define CLERIC 1
 #define ROGUE 2

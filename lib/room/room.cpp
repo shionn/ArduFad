@@ -2,7 +2,24 @@
 
 Room::Room(Arduboy2 *ab, uint8_t pattern)
 {
-    this->pattern = pattern;
+#ifdef DEBUG
+    Serial.print("pattern " + pattern);
+    Serial.println(pattern);
+#endif
+    this->i_data = 0;
+    while (pgm_read_byte(room_data + i_data) != pattern)
+    {
+        uint8_t w = pgm_read_byte(room_data + i_data + 1);
+        uint8_t h = pgm_read_byte(room_data + i_data + 2);
+#ifdef DEBUG
+        Serial.print(i_data);
+        Serial.print(" W ");
+        Serial.print(w);
+        Serial.print(" H ");
+        Serial.println(h);
+#endif
+        this->i_data += (w * h) / 4 + ((w * h) % 4 ? 1 : 0) + 3;
+    }
     if (pattern == 3 || pattern == 4 || pattern == 5 || pattern >= 11 && pattern <= 14 || pattern == 26 || pattern == 32 || pattern == 33 || pattern == 42 || pattern == 45 || pattern == 51 || pattern == 53 || pattern == 55 || pattern == 62 || pattern == 63 || pattern == 65)
     {
         this->flags |= ROOM_CORRIDOR_FLAG;
@@ -15,60 +32,48 @@ void Room::drawDoorH(uint8_t x, uint8_t y)
     ab->drawRect(x * 8, y * 8 + 2, 8, 4);
 }
 
-void Room::drawWallH(uint8_t x, uint8_t y)
+void Room::drawDoorV(uint8_t x, uint8_t y)
 {
-    ab->fillRect(x * 8, y * 8 + 1, 8, 6);
+    ab->drawRect(x * 8 + 2, y * 8, 4, 8);
 }
 
-void Room::drawWallV(uint8_t x, uint8_t y)
+void Room::drawWall(uint8_t x, uint8_t y)
 {
-    ab->fillRect(x * 8 + 1, y * 8, 6, 8);
-}
-
-void Room::drawCorner(uint8_t x, uint8_t y)
-{
-    ab->fillRoundRect(x * 8, y * 8, 8, 8, 1);
-}
-
-void Room::drawExit(uint8_t x, uint8_t y)
-{
-    ab->drawChar(x * 8 + 1, y * 8, 'e', 1, 0, 1);
+    ab->fillRect(x * 8, y * 8, 8, 8);
 }
 
 void Room::draw()
 {
-    switch (pattern)
-    {
-    case 1:
-    default:
-        drawCorner(0, 2);
-        drawDoorH(1, 2);
-        drawWallH(2, 2);
-        drawWallH(3, 2);
-        drawWallH(4, 2);
-        drawDoorH(5, 2);
-        drawWallH(6, 2);
-        drawWallH(7, 2);
-        drawWallH(8, 2);
-        drawDoorH(9, 2);
-        drawCorner(10, 2);
-        drawWallV(0, 3);
-        drawWallV(10, 3);
-        drawWallV(0, 4);
-        drawWallV(10, 4);
-        drawCorner(0, 5);
-        drawWallH(1, 5);
-        drawWallH(2, 5);
-        drawWallH(3, 5);
-        drawWallH(4, 5);
-        drawExit(5, 5);
-        drawWallH(6, 5);
-        drawWallH(7, 5);
-        drawWallH(8, 5);
-        drawWallH(9, 5);
-        drawCorner(10, 5);
-        break;
-    }
+    for (uint8_t y = 0; y < height(); y++)
+        for (uint8_t x = 0; x < width(); x++)
+        {
+            uint8_t c = data(x, y);
+            if (c == ROOM_DOOR)
+                if (x == 0 || x == width() - 1)
+                    drawDoorV(x, y);
+                else
+                    drawDoorH(x, y);
+            else if (c == ROOM_WALL)
+                drawWall(x, y);
+        }
+}
+
+uint8_t Room::data(uint8_t x, uint8_t y)
+{
+    uint8_t i = y * width() + x;
+    uint8_t c = pgm_read_byte(room_data + i_data + 3 + i / 4);
+    c = c >> (3 - (i % 4)) * 2;
+    return c & 0b00000011;
+}
+
+uint8_t Room::width()
+{
+    return pgm_read_byte(room_data + i_data + 1);
+}
+
+uint8_t Room::height()
+{
+    return pgm_read_byte(room_data + i_data + 2);
 }
 
 bool Room::isCorridor()
