@@ -3,7 +3,7 @@
 
 #include <Arduboy2.h>
 
-// #define DEBUG
+#define DEBUG
 
 #define TEAM_SIZE 4
 #define MAX_DUNGEON_SIZE 256
@@ -29,5 +29,10 @@
 #define BAG_SPELL_BOOK 0b01000000
 
 #define SPELL_BLESSING 0b00000001
+
+#define MAP_ZONE_WIDTH 96
+#define MAP_ZONE_WIDTH_HALF 48
+#define MAP_ZONE_HEIGHT 49
+#define MAP_ZONE_HEIGHT_HALF 24
 
 #endif

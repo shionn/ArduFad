@@ -23,8 +23,10 @@ class Door
 public:
     Door(uint8_t x, uint8_t y);
 
-private:
+public:
     uint8_t x, y;
+
+private:
     Room *room;
 };
 
@@ -34,11 +36,15 @@ public:
     Room(Arduboy2 *ab, uint8_t pattern);
     void draw();
     bool isCorridor();
+    uint8_t getDrawStartX();
+    uint8_t getDrawStartY();
+
+public:
+    uint8_t doorCount;
+    Door *door[4];
 
 private:
     Arduboy2 *ab;
-    Door *door[4];
-    uint8_t doorCount;
     uint8_t flags;
     uint16_t i_data;
 
@@ -49,7 +55,7 @@ private:
     void drawWall(uint8_t x, uint8_t y);
 
     uint8_t data(uint8_t x, uint8_t y);
-    boolean isDoor(uint8_t x, uint8_t y);
+    bool isDoor(uint8_t x, uint8_t y);
     uint8_t width();
     uint8_t height();
 };

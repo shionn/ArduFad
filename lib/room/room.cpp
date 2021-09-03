@@ -37,6 +37,7 @@ Room::Room(Arduboy2 *ab, uint8_t pattern)
         i_data += (w * h) / 4 + ((w * h) % 4 ? 1 : 0) + 4;
     }
     flags = pgm_read_byte(room_data + i_data + 3);
+    initDoors();
     this->ab = ab;
 }
 
@@ -56,6 +57,11 @@ void Room::initDoors()
             flags |= ROOM_DOOR_S_FLAG;
             door[doorCount++] = new Door(x, h - 1);
         }
+#ifdef DEBUG
+        Serial.print(x);
+        Serial.print(", ");
+        Serial.println(doorCount);
+#endif
     }
     for (int y = 0; y < h; y++)
     {
@@ -69,12 +75,17 @@ void Room::initDoors()
             flags |= ROOM_DOOR_E_FLAG;
             door[doorCount++] = new Door(w - 1, y);
         }
+#ifdef DEBUG
+        Serial.print(y);
+        Serial.print(", ");
+        Serial.println(doorCount);
+#endif
     }
 }
 
-void Room::drawDoorH(uint8_t x, uint8_t y) { ab->drawRect(48 - width() * 4 + x * 8, 24 - height() * 4 + y * 8 + 2, 8, 4); }
-void Room::drawDoorV(uint8_t x, uint8_t y) { ab->drawRect(48 - width() * 4 + x * 8 + 2, 24 - height() * 4 + y * 8, 4, 8); }
-void Room::drawWall(uint8_t x, uint8_t y) { ab->fillRect(48 - width() * 4 + x * 8, 24 - height() * 4 + y * 8, 8, 8); }
+void Room::drawDoorH(uint8_t x, uint8_t y) { ab->drawRect(getDrawStartX() + x * 8, getDrawStartY() + y * 8 + 2, 8, 4); }
+void Room::drawDoorV(uint8_t x, uint8_t y) { ab->drawRect(getDrawStartX() + x * 8 + 2, getDrawStartY() + y * 8, 4, 8); }
+void Room::drawWall(uint8_t x, uint8_t y) { ab->fillRect(getDrawStartX() + x * 8, getDrawStartY() + y * 8, 8, 8); }
 
 void Room::draw()
 {
@@ -100,7 +111,13 @@ uint8_t Room::data(uint8_t x, uint8_t y)
     return c & 0b00000011;
 }
 
+uint8_t Room::getDrawStartX() { return MAP_ZONE_WIDTH_HALF - width() * 4; }
+uint8_t Room::getDrawStartY() { return MAP_ZONE_HEIGHT_HALF - height() * 4; }
 uint8_t Room::width() { return pgm_read_byte(room_data + i_data + 1); }
-
 uint8_t Room::height() { return pgm_read_byte(room_data + i_data + 2); }
 bool Room::isCorridor() { return this->flags & ROOM_CORRIDOR_FLAG; }
+bool Room::isDoor(uint8_t x, uint8_t y)
+{
+    uint8_t d = data(x, y);
+    return d == ROOM_DOOR || d == ROOM_GATHEWAY;
+}

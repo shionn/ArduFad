@@ -1,12 +1,15 @@
 #include <menu.h>
 
-
+// 0-5 : bouton en bas
+// 6-10 : porte
 
 Menu::Menu(Arduboy2 *ab, Player **team, Font3x5 *font)
 {
     this->ab = ab;
     this->team = team;
     this->font = font;
+
+    this->cursor = 6;
 }
 void Menu::draw(Room *room)
 {
@@ -18,6 +21,17 @@ void Menu::draw(Room *room)
         font->print(team[i]->getHp());
         font->print('/');
         font->print(team[i]->getMaxHp());
+    }
+
+    font->setCursor(98, 24);
+    font->print(room->doorCount);
+
+    for (uint8_t d = 0; d < room->doorCount; d++)
+    {
+        if (d + 6 == cursor)
+        {
+            ab->drawRoundRect(room->door[d]->x * 8 + room->getDrawStartX(), room->door[d]->y * 8 + room->getDrawStartY(), 8, 8, 1);
+        }
     }
 
     drawButton(1, 50, F("Attaque"), true);
