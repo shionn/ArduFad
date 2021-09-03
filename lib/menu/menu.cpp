@@ -35,13 +35,32 @@ void Menu::draw(Room *room)
                           room->door[cursor]->y * 8 + room->getDrawStartY(),
                           8, 8, 3);
     }
+    if (room->monster)
+    {
+        if (room->monster->getAction() == M_ACTION_NONE)
+        {
+            drawButton(1, 0, F("Attaque"), cursor == 4);
+            drawButton(1, 6, F("Attendre"), cursor == 5);
+            drawButton(1, 12, F("Fuir"), cursor == 6);
+            font->setCursor(1, 51);
+        }
+        font->print(room->monster->getName());
+        font->print(F(" x"));
+        font->print(room->monster->getHp());
+        font->print(F(" L"));
+        font->print(room->monster->getLvl());
+    }
+    else
+    {
+        drawButton(1, 0, F("Sac"), cursor == 7);
+        drawButton(1, 6, F("Sort"), cursor == 7);
+        if (room->pattern() <= 6)
+        {
+            drawButton(1, 12, F("Sortir"), cursor == 8);
+        }
+    }
 
-    drawButton(1, 50, F("Attaque"), cursor == 4);
-    drawButton(43, 50, F("Todo"), cursor == 5);
-    drawButton(88, 50, F("Fuir"), cursor == 6);
-    drawButton(1, 57, F("Explorer"), cursor == 7);
-    drawButton(43, 57, F("todo"), cursor == 7);
-    drawButton(88, 57, F("Sortir"), cursor == 8);
+    //    drawButton(43, 57, F("todo"), cursor == 7);
 }
 Room *Menu::updade(Room *room)
 {

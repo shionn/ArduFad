@@ -4,6 +4,7 @@
 #include <Arduboy2.h>
 #include <constants.h>
 #include <dices.h>
+#include <monster.h>
 
 #define ROOM_CORRIDOR_FLAG 0b0000001
 #define ROOM_DOOR_N_FLAG 0b0000010
@@ -57,6 +58,7 @@ public:
 public:
     uint8_t doorCount = 0;
     Door *door[4] = {NULL, NULL, NULL, NULL};
+    Monster *monster = NULL;
 
 private:
     Arduboy2 *ab;

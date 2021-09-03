@@ -72,6 +72,7 @@ Room::Room(Arduboy2 *ab, uint8_t pattern)
     }
     flags = pgm_read_byte(room_data + i_data + 3);
     initDoors();
+    initContent();
     this->ab = ab;
 }
 
@@ -79,6 +80,7 @@ Room::~Room()
 {
     for (uint8_t d = 0; d < doorCount; d++)
         delete door[d];
+    delete monster;
 }
 
 void Room::initDoors()
@@ -109,6 +111,27 @@ void Room::initDoors()
             flags |= ROOM_DOOR_N_FLAG;
             door[doorCount++] = new Door(x, 0, DOOR_N);
         }
+}
+
+void Room::initContent()
+{
+    switch (XD6(2))
+    {
+    case 6:
+        monster = new Monster(M_VERMIN);
+        break;
+    case 7:
+    case 8:
+        monster = new Monster(M_MINIONS);
+        break;
+    case 10:
+        monster = new Monster(M_WEIRD);
+        break;
+    case 11:
+    case 12:
+        monster = new Monster(M_BOSS);
+        break;
+    }
 }
 
 Room *Room::open(uint8_t d)
