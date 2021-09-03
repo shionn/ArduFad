@@ -43,18 +43,12 @@ void loop()
     return;
 
   ab.pollButtons();
-  menu.updade(room);
+  room = menu.updade(room);
 
   ab.clear();
   ab.drawFastHLine(0, 49, 127);
   ab.drawFastVLine(96, 0, 49);
-#ifdef DEBUG
-  Serial.println("== room draw ==");
-#endif
   room->draw();
-#ifdef DEBUG
-  Serial.println("== menu draw ==");
-#endif
   menu.draw(room);
   ab.display();
 }

@@ -12,7 +12,7 @@ class Menu
 public:
     Menu(Arduboy2 *ab, Player **team, Font3x5 *font);
     void draw(Room *room);
-    void updade(Room *room);
+    Room *updade(Room *room);
 
 private:
     Arduboy2 *ab;
