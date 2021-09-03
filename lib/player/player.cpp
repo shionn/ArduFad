@@ -1,103 +1,55 @@
 
 #include <player.h>
 
-void Player::initialize(uint8_t clazz)
+const PlayerData_t playerDatas[7] PROGMEM = {
+    {"Warrior", 'W', 6, 2},
+    {"Cleric", 'C', 4, 1},
+    {"Rogue", 'R', 3, 3},
+    {"Wizard", 'Z', 2, 4},
+    {"Barbarian", 'B', 7, 1},
+    {"Elf", 'E', 4, 2},
+    {"Dwarf", 'D', 5, 3}};
+
+Player::Player(uint8_t type)
 {
-    this->clazz = clazz;
-    this->lvl = 1;
-    this->hp = getMaxHp();
-    switch (clazz)
+    this->type = type;
+    lvl = 1;
+    hp = getMaxHp();
+    gold = XD6(getPlayerData().baseGold);
+    if (type == CLERIC)
     {
-    case WARRIOR:
-        gold = XD6(2);
-        break;
-    case CLERIC:
-        gold = D6();
         spellbook = SPELL_BLESSING;
         spellcount = 3;
-        break;
-    case ROGUE:
-        gold = XD6(3);
+    }
+    else if (type == ROGUE)
         bag = BAG_ROPE | BAG_LOCK_PICKS;
-        break;
-    case WIZARD:
-        gold = XD6(4);
+    else if (type == WIZARD)
+    {
         bag = BAG_SPELL_BOOK;
         spellcount = 3;
-        break;
-    case BARBARIAN:
-        gold = D6();
-        break;
-    case ELF:
-        gold = XD6(2);
-        break;
-    case DWARF:
-        gold = XD6(3);
-        break;
     }
 }
 
-uint8_t Player::getHp()
-{
-    return hp;
-}
+void Player::addEquip(uint16_t equip) { this->equip |= equip; }
 
-uint8_t Player::getMaxHp()
-{
-    switch (clazz)
-    {
-    case WIZARD:
-        return 2 + lvl;
-    case ROGUE:
-        return 3 + lvl;
-    case CLERIC:
-    case ELF:
-        return 4 + lvl;
-    case DWARF:
-        return 5 + lvl;
-    case WARRIOR:
-        return 6 + lvl;
-    case BARBARIAN:
-    default:
-        return 7 + lvl;
-    }
-}
+uint8_t Player::getHp() { return hp; }
+uint8_t Player::getMaxHp() { return getPlayerData().baseHp + lvl; }
+String Player::getFullClassName() { return getPlayerData().fullName; }
+char Player::getShortClassName() { return getPlayerData().shortName; }
 
-void Player::addEquip(uint16_t equip)
+PlayerData_t Player::getPlayerData()
 {
-    this->equip |= equip;
-}
-
-String Player::fullClassName()
-{
-    return className(clazz);
-}
-
-String Player::shortClassName()
-{
-    switch (clazz)
-    {
-    case WARRIOR:
-        return F("W");
-    case CLERIC:
-        return F("C");
-    case ROGUE:
-        return F("R");
-    case WIZARD:
-        return F("Z");
-    case BARBARIAN:
-        return F("B");
-    case ELF:
-        return F("E");
-    case DWARF:
-    default:
-        return F("D");
-    }
+    PlayerData_t out;
+    memcpy_P(&out, &playerDatas[type], sizeof(PlayerData_t));
+    return out;
 }
 
 String className(uint8_t clazz)
 {
-    switch (clazz)
+    PlayerData_t out;
+    memcpy_P(&out, &playerDatas[clazz], sizeof(PlayerData_t));
+    return out.fullName;
+    /*switch (clazz)
     {
     case WARRIOR:
         return F("Warrior");
@@ -114,5 +66,5 @@ String className(uint8_t clazz)
     case DWARF:
     default:
         return F("Dwarf");
-    }
+    }*/
 }

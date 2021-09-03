@@ -20,6 +20,7 @@
 // Passage   01
 // porte H/V 10
 // mur       11
+class Room;
 
 class Door
 {
@@ -28,6 +29,7 @@ public:
 
 private:
     uint8_t x, y;
+    Room *room;
 };
 
 class Room

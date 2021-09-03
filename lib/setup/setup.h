@@ -10,12 +10,12 @@
 class Setup
 {
 public:
-    Setup(Arduboy2 *ab, Player *team);
+    Setup(Arduboy2 *ab, Player **team);
     void selectTeams();
 
 private:
     Arduboy2 *ab;
-    Player *team;
+    Player **team;
 
     uint16_t selectEquip(uint8_t count, uint16_t *choices);
 };

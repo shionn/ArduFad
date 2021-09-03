@@ -1,6 +1,6 @@
 #include <setup.h>
 
-Setup::Setup(Arduboy2 *ab, Player *team)
+Setup::Setup(Arduboy2 *ab, Player **team)
 {
   this->ab = ab;
   this->team = team;
@@ -29,14 +29,15 @@ void Setup::selectTeams()
     if (ab->justPressed(A_BUTTON) && count > 0)
     {
       count--;
+      free(team[count]);
     }
-    if (ab->justPressed(B_BUTTON) && count == 4 && cursor == 7)
+    if (ab->justPressed(B_BUTTON) && count == TEAM_SIZE && cursor == 7)
     {
       selected = true;
     }
-    if (ab->justPressed(B_BUTTON) && count < 4)
+    if (ab->justPressed(B_BUTTON) && count < TEAM_SIZE)
     {
-      team[count].initialize(cursor);
+      team[count] = new Player(cursor);
       switch (cursor)
       {
       case WARRIOR:
@@ -44,20 +45,20 @@ void Setup::selectTeams()
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].addEquip(selectEquip(4, choicess));
+        team[count]->addEquip(selectEquip(4, choicess));
         break;
       case CLERIC:
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].addEquip(selectEquip(4, choicess));
+        team[count]->addEquip(selectEquip(4, choicess));
         break;
       case ROGUE:
-        team[count].addEquip(ARMOR_LIGHT | WEAPON_ONE_HANDED_LIGHT | WEAPON_SLASHING);
+        team[count]->addEquip(ARMOR_LIGHT | WEAPON_ONE_HANDED_LIGHT | WEAPON_SLASHING);
         break;
       case WIZARD:
-        team[count].addEquip(WEAPON_ONE_HANDED_LIGHT | WEAPON_CRUSHING);
+        team[count]->addEquip(WEAPON_ONE_HANDED_LIGHT | WEAPON_CRUSHING);
         //TODO team[count].spellbook =
         break;
       case BARBARIAN:
@@ -65,19 +66,19 @@ void Setup::selectTeams()
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_LIGHT | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].addEquip(selectEquip(4, choicess));
+        team[count]->addEquip(selectEquip(4, choicess));
         break;
       case ELF:
         choicess[0] = ARMOR_LIGHT | WEAPON_BOW | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | WEAPON_BOW | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
-        team[count].addEquip(selectEquip(2, choicess));
+        team[count]->addEquip(selectEquip(2, choicess));
         break;
       case DWARF:
         choicess[0] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING;
         choicess[1] = ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING;
         choicess[2] = ARMOR_HEAVY | WEAPON_TWO_HANDED | WEAPON_SLASHING;
         choicess[3] = ARMOR_HEAVY | WEAPON_TWO_HANDED | WEAPON_CRUSHING;
-        team[count].addEquip(selectEquip(4, choicess));
+        team[count]->addEquip(selectEquip(4, choicess));
         break;
       }
       count++;
@@ -99,7 +100,7 @@ void Setup::selectTeams()
     for (uint8_t i = 0; i < count; i++)
     {
       ab->setCursor(64, i * 8);
-      ab->print(team[i].fullClassName());
+      ab->print(team[i]->getFullClassName());
     }
 
     ab->display();

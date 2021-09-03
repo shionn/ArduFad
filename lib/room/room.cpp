@@ -72,20 +72,9 @@ void Room::initDoors()
     }
 }
 
-void Room::drawDoorH(uint8_t x, uint8_t y)
-{
-    ab->drawRect(x * 8, y * 8 + 2, 8, 4);
-}
-
-void Room::drawDoorV(uint8_t x, uint8_t y)
-{
-    ab->drawRect(x * 8 + 2, y * 8, 4, 8);
-}
-
-void Room::drawWall(uint8_t x, uint8_t y)
-{
-    ab->fillRect(x * 8, y * 8, 8, 8);
-}
+void Room::drawDoorH(uint8_t x, uint8_t y) { ab->drawRect(x * 8, y * 8 + 2, 8, 4); }
+void Room::drawDoorV(uint8_t x, uint8_t y) { ab->drawRect(x * 8 + 2, y * 8, 4, 8); }
+void Room::drawWall(uint8_t x, uint8_t y) { ab->fillRect(x * 8, y * 8, 8, 8); }
 
 void Room::draw()
 {
@@ -111,17 +100,7 @@ uint8_t Room::data(uint8_t x, uint8_t y)
     return c & 0b00000011;
 }
 
-uint8_t Room::width()
-{
-    return pgm_read_byte(room_data + i_data + 1);
-}
+uint8_t Room::width() { return pgm_read_byte(room_data + i_data + 1); }
 
-uint8_t Room::height()
-{
-    return pgm_read_byte(room_data + i_data + 2);
-}
-
-bool Room::isCorridor()
-{
-    return this->flags & ROOM_CORRIDOR_FLAG;
-}
+uint8_t Room::height() { return pgm_read_byte(room_data + i_data + 2); }
+bool Room::isCorridor() { return this->flags & ROOM_CORRIDOR_FLAG; }
