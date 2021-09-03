@@ -72,9 +72,9 @@ void Room::initDoors()
     }
 }
 
-void Room::drawDoorH(uint8_t x, uint8_t y) { ab->drawRect(x * 8, y * 8 + 2, 8, 4); }
-void Room::drawDoorV(uint8_t x, uint8_t y) { ab->drawRect(x * 8 + 2, y * 8, 4, 8); }
-void Room::drawWall(uint8_t x, uint8_t y) { ab->fillRect(x * 8, y * 8, 8, 8); }
+void Room::drawDoorH(uint8_t x, uint8_t y) { ab->drawRect(48 - width() * 4 + x * 8, 24 - height() * 4 + y * 8 + 2, 8, 4); }
+void Room::drawDoorV(uint8_t x, uint8_t y) { ab->drawRect(48 - width() * 4 + x * 8 + 2, 24 - height() * 4 + y * 8, 4, 8); }
+void Room::drawWall(uint8_t x, uint8_t y) { ab->fillRect(48 - width() * 4 + x * 8, 24 - height() * 4 + y * 8, 8, 8); }
 
 void Room::draw()
 {

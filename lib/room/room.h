@@ -16,10 +16,6 @@
 #define ROOM_DOOR 0b00000010
 #define ROOM_WALL 0b00000011
 
-// rien      00
-// Passage   01
-// porte H/V 10
-// mur       11
 class Room;
 
 class Door

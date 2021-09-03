@@ -82,6 +82,10 @@ void Setup::selectTeams()
         break;
       }
       count++;
+      if (count == TEAM_SIZE)
+      {
+        cursor = 7;
+      }
     }
 
     ab->clear();
