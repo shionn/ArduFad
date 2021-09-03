@@ -47,7 +47,8 @@ void loop()
 
   ab.clear();
   ab.drawFastHLine(0, 49, 127);
-  ab.drawFastVLine(96, 0, 49);
+  ab.drawFastVLine(27, 0, 49);
+  ab.drawFastVLine(LEFT_PANE_X, 0, 49);
   room->draw();
   menu.draw(room);
   ab.display();

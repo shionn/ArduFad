@@ -6,6 +6,19 @@ Setup::Setup(Arduboy2 *ab, Player **team)
   this->team = team;
 }
 
+#ifdef AUTO_SELECT_TEAM
+void Setup::selectTeams()
+{
+  team[0] = new Player(WARRIOR);
+  team[0]->addEquip(ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_SLASHING);
+  team[1] = new Player(DWARF);
+  team[1]->addEquip(ARMOR_HEAVY | WEAPON_TWO_HANDED | WEAPON_CRUSHING);
+  team[2] = new Player(CLERIC);
+  team[2]->addEquip(ARMOR_LIGHT | ARMOR_SHIELD | WEAPON_ONE_HANDED | WEAPON_CRUSHING);
+  team[3] = new Player(ELF);
+  team[3]->addEquip(ARMOR_LIGHT | WEAPON_BOW | WEAPON_ONE_HANDED | WEAPON_SLASHING);
+}
+#else
 void Setup::selectTeams()
 {
   boolean selected = false;
@@ -110,6 +123,7 @@ void Setup::selectTeams()
     ab->display();
   }
 };
+#endif
 
 uint16_t Setup::selectEquip(uint8_t count, uint16_t *choices)
 {

@@ -3,7 +3,8 @@
 
 #include <Arduboy2.h>
 
-#define DEBUG
+//#define DEBUG
+#define AUTO_SELECT_TEAM
 
 #define TEAM_SIZE 4
 #define MAX_DUNGEON_SIZE 256
@@ -30,9 +31,8 @@
 
 #define SPELL_BLESSING 0b00000001
 
-#define MAP_ZONE_WIDTH 96
-#define MAP_ZONE_WIDTH_HALF 48
-#define MAP_ZONE_HEIGHT 49
-#define MAP_ZONE_HEIGHT_HALF 24
+#define MAP_ZONE_CENTER_X 64
+#define MAP_ZONE_CENTER_Y 24
+#define LEFT_PANE_X 100
 
 #endif

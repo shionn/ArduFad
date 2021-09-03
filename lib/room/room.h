@@ -55,7 +55,7 @@ public:
     uint8_t getFirstDoorIndex(uint8_t dir, uint8_t def = 255);
 
 public:
-    uint8_t doorCount;
+    uint8_t doorCount = 0;
     Door *door[4] = {NULL, NULL, NULL, NULL};
 
 private:

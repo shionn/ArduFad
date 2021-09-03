@@ -8,30 +8,32 @@ Menu::Menu(Arduboy2 *ab, Player **team, Font3x5 *font)
     this->ab = ab;
     this->team = team;
     this->font = font;
-
     this->cursor = 5;
 }
 void Menu::draw(Room *room)
 {
     for (uint8_t i = 0; i < TEAM_SIZE; i++)
     {
-        font->setCursor(98, i * 6);
+        font->setCursor(102, i * 6);
         font->print(team[i]->getShortClassName());
-        font->setCursor(104, i * 6);
+        font->setCursor(108, i * 6);
         font->print(team[i]->getHp());
         font->print('/');
         font->print(team[i]->getMaxHp());
     }
 
-    font->setCursor(98, 24);
-    font->print(room->pattern());
+    font->setCursor(102, 24);
+    font->print(cursor);
 
-    for (uint8_t d = 0; d < room->doorCount; d++)
+    if (cursor < room->doorCount)
     {
-        if (d == cursor)
-        {
-            ab->drawRoundRect(room->door[d]->x * 8 + room->getDrawStartX(), room->door[d]->y * 8 + room->getDrawStartY(), 8, 8, 3);
-        }
+        font->setCursor(102, 30);
+        font->print(room->door[cursor]->x);
+        font->setCursor(102, 36);
+        font->print(room->door[cursor]->y);
+        ab->drawRoundRect(room->door[cursor]->x * 8 + room->getDrawStartX(),
+                          room->door[cursor]->y * 8 + room->getDrawStartY(),
+                          8, 8, 3);
     }
 
     drawButton(1, 50, F("Attaque"), cursor == 4);
@@ -58,7 +60,8 @@ Room *Menu::updade(Room *room)
                 cursor = room->getFirstDoorIndex(DOOR_N, cursor);
             break;
         case 4 ... 6:
-            cursor = 0; // premiere porte celle la plus en bas
+            if (room->doorCount)
+                cursor = 0; // premiere porte celle la plus en bas
         }
     }
     if (ab->justPressed(DOWN_BUTTON))
